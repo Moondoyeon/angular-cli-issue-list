@@ -10,17 +10,11 @@ function Loading() {
 export default Loading;
 const Wrapper = styled.div`
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-width: 100vh;
-  min-height: 100vh;
 `;
 const Skeleton = styled.div`
   z-index: 999;
   position: relative;
-  top: 20px;
+  top: 50px;
   left: 35px;
   border: 8px solid rgb(250, 250, 250);
   border-top: 8px solid #0b0b0b;

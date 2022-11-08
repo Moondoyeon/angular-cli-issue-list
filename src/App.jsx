@@ -1,17 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
-import PostList from './pages/PostList';
-import PostDetail from './pages/PostDetail';
 import NotFound from './pages/NotFound';
+import IssueDetail from './pages/IssueDetail';
+import IssueList from './pages/IssueList';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<PostList />} />
-        <Route path="/:id" element={<PostDetail />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+    <>
+      <Header />
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<IssueList />} />
+          <Route path="/:id" element={<IssueDetail />} />
+          <Route path="/error" element={<NotFound />} />
+        </Routes>
+      </div>
+    </>
   );
 }
 

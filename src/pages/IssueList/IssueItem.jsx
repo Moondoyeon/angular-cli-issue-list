@@ -1,18 +1,20 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoChatboxOutline } from 'react-icons/io5';
-import MarkdownRender from '../../lib/Markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
+import parseDate from '../../utils/parseDate';
+import { ReactComponent as Circle } from '../../assets/circle-dot.svg';
+import { flexBox, responsive } from '../../styles/mixin';
 
-function ListItem({ data, isDetail }) {
+function IssueItem({ data, isDetail }) {
   const navigate = useNavigate();
+  const createdAt = parseDate(data.created_at);
   const goDetailPage = () => {
     navigate(`/${data.number}`);
   };
-  const createdAt = new Date(data.created_at).toLocaleDateString().slice(0, -1);
   return (
     <Container>
       <Top>
@@ -21,16 +23,19 @@ function ListItem({ data, isDetail }) {
             <img src={data.user.avatar_url} alt="profile" />
           </ImgWrapper>
         )}
+        <SVGWrapper>
+          <CircleSVG />
+        </SVGWrapper>
         <TopLeft>
           <Title>
-            <div>#{data.number}</div>
             <div className="title" onClick={isDetail ? null : goDetailPage}>
               {data.title}
             </div>
           </Title>
           <Info>
-            <div>{data.user.login}</div>
+            <div>#{data.number}</div>
             <div>opened on {createdAt}</div>
+            <div>by {data.user.login}</div>
           </Info>
         </TopLeft>
         <TopRight>
@@ -40,48 +45,54 @@ function ListItem({ data, isDetail }) {
       </Top>
       {isDetail && (
         <Bottom>
-          <MarkdownRender>{data.body}</MarkdownRender>
+          <MarkdownPreview source={data.body} />
         </Bottom>
       )}
     </Container>
   );
 }
-export default ListItem;
+export default IssueItem;
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 `;
 const Top = styled.div`
-  display: flex;
-  padding: 10px;
+  ${flexBox('row', '', 'center')};
+  padding: 15px;
   border-bottom: 1px solid;
-  border-color: ${({ theme }) => theme.borderColor};
-  align-items: center;
+  border-color: ${({ theme }) => theme.lightGray};
+`;
+const SVGWrapper = styled.div`
+  ${flexBox('row', '', 'flex-start')};
+  height: 46px;
+`;
+const CircleSVG = styled(Circle)`
+  width: 15px;
+  padding-bottom: 4px;
 `;
 const Bottom = styled.div`
-  padding: 20px;
-  color: ${({ theme }) => theme.darkGrayColor};
+  padding: 15px;
+  color: ${({ theme }) => theme.darkGray};
 `;
 
 const ImgWrapper = styled.div`
-  padding: 5px;
+  margin-right: 10px;
   img {
-    width: 60px;
+    width: 40px;
     border-radius: 100%;
   }
 `;
 const TopLeft = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexBox('column', '', '')};
   width: 90%;
+  ${responsive('phone')} {
+    width: 100%;
+  }
 `;
 const TopRight = styled.div`
   width: 10%;
   white-space: nowrap;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  color: ${({ theme }) => theme.grayColor};
+  ${flexBox('row', 'flex-end', 'flex-start')};
+  color: ${({ theme }) => theme.mediumGray};
   .chat-icon {
     white-space: nowrap;
     font-size: 14px;
@@ -91,10 +102,14 @@ const TopRight = styled.div`
     font-weight: 600;
     margin-left: 5px;
   }
+  ${responsive('phone')} {
+    display: none;
+    width: 0%;
+  }
 `;
 
 const Title = styled.div`
-  display: flex;
+  ${flexBox('row', '', '')};
   .title {
     cursor: pointer;
     font-weight: 700;
@@ -104,10 +119,11 @@ const Title = styled.div`
   }
 `;
 const Info = styled.div`
-  display: flex;
+  ${flexBox('row', '', '')};
+  white-space: nowrap;
   div {
     margin-right: 5px;
-    color: ${({ theme }) => theme.grayColor};
+    color: ${({ theme }) => theme.mediumGray};
     font-size: 14px;
   }
 `;
