@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { flexBox, responsive } from './mixin';
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -8,28 +9,19 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
 }
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0px;
-  background-color: white;
-  padding:20px;
+  ${flexBox('column', 'center', 'center')};  
 }
 .App {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid;
-  border-color: ${({ theme }) => theme.borderColor};
-  border-radius:3px;
-}
-/* 500px 이하일때 */
-@media screen and (max-width: 500px) {
-  .App {
-    width: 375px;
+  width:100vw;
+  ${flexBox()};
+  ${responsive('phone')} {
+    padding: 0;
   }
+}
+
+a {
+  text-decoration:none;
+  color:${({ theme }) => theme.darkGrayColor};
 }
 `;
 
